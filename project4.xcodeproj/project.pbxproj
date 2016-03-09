@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7DAB84531C8F5EED00B8A6EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB84521C8F5EED00B8A6EA /* main.cpp */; };
+		7DAB845B1C8F5F2900B8A6EA /* DiskMultiMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB84591C8F5F2900B8A6EA /* DiskMultiMap.cpp */; };
+		7DAB845E1C8F5F4F00B8A6EA /* IntelWeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DAB845C1C8F5F4F00B8A6EA /* IntelWeb.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,13 @@
 /* Begin PBXFileReference section */
 		7DAB844F1C8F5EED00B8A6EA /* project4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = project4; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DAB84521C8F5EED00B8A6EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7DAB84591C8F5F2900B8A6EA /* DiskMultiMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskMultiMap.cpp; sourceTree = "<group>"; };
+		7DAB845A1C8F5F2900B8A6EA /* DiskMultiMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskMultiMap.h; sourceTree = "<group>"; };
+		7DAB845C1C8F5F4F00B8A6EA /* IntelWeb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntelWeb.cpp; sourceTree = "<group>"; };
+		7DAB845D1C8F5F4F00B8A6EA /* IntelWeb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelWeb.h; sourceTree = "<group>"; };
+		7DAB84601C8F5F8A00B8A6EA /* MultiMapTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiMapTuple.h; sourceTree = "<group>"; };
+		7DAB84631C8F5FD400B8A6EA /* InteractionTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractionTuple.h; sourceTree = "<group>"; };
+		7DAB84651C8F654500B8A6EA /* BinaryFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinaryFile.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +67,13 @@
 			isa = PBXGroup;
 			children = (
 				7DAB84521C8F5EED00B8A6EA /* main.cpp */,
+				7DAB84591C8F5F2900B8A6EA /* DiskMultiMap.cpp */,
+				7DAB845A1C8F5F2900B8A6EA /* DiskMultiMap.h */,
+				7DAB845C1C8F5F4F00B8A6EA /* IntelWeb.cpp */,
+				7DAB845D1C8F5F4F00B8A6EA /* IntelWeb.h */,
+				7DAB84601C8F5F8A00B8A6EA /* MultiMapTuple.h */,
+				7DAB84631C8F5FD400B8A6EA /* InteractionTuple.h */,
+				7DAB84651C8F654500B8A6EA /* BinaryFile.h */,
 			);
 			path = project4;
 			sourceTree = "<group>";
@@ -119,6 +135,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DAB84531C8F5EED00B8A6EA /* main.cpp in Sources */,
+				7DAB845E1C8F5F4F00B8A6EA /* IntelWeb.cpp in Sources */,
+				7DAB845B1C8F5F2900B8A6EA /* DiskMultiMap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
