@@ -14,6 +14,8 @@ int main()
 
     map.insert("the first one" , "hi", "no");
     map.insert("ho", "1" ,"3");
+    map.insert("ho", "1" ,"3");
+    map.insert("ho", "1" ,"3");
     
     cout<<(map.erase("ho", "1", "3"));
    

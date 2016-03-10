@@ -94,7 +94,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
     Bucket bucket;
  
     m_bf.read(bucket, offset);
-    cout << "bucket.list at first is " << bucket.list << endl;
+   
 
     if(header.reuse.curr != 0)
     {
@@ -136,14 +136,40 @@ int DiskMultiMap::erase(const std::string& key,	const std::string& value,
     Node prev;
     prev.next = list;
     
-    cout <<"bucket.list is " << bucket.list << endl;
     
     while(list != 0)
     {
     Node curr;
     m_bf.read(curr, list);
 
-        if(curr.key == key.c_str() && curr.value == value.c_str() && curr.context == context.c_str())
+
+        
+        bool same1 = true;
+        const char* thekey = curr.key;
+        for(int i = 0; i != key.length(); i++, thekey++)
+        {
+            if(key[i] != *thekey)
+                same1 = false;
+        }
+
+        bool same2 = true;
+        const char* thevalue = curr.value;
+        for(int i = 0; i != value.length(); i++, thevalue++)
+        {
+            if(value[i] != *thevalue)
+                same2 = false;
+        }
+        
+        bool same3 = true;
+        const char* thecontext = curr.context;
+        for(int i = 0; i != context.length(); i++, thecontext++)
+        {
+            if(context[i] != *thecontext)
+                same3 = false;
+        }
+        
+        
+        if(same1 == true && same2 == true && same3 == true)
         {
             
             reuseNode toreuse;
