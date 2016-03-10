@@ -19,14 +19,17 @@ int main()
     map.insert("ho", "1" ,"3");
 
     DiskMultiMap::Iterator it = map.search("ho");
-    if(it.isValid())
-        cout <<"valid!!!\n";
+
     string key = (*it).key;
-    cout <<"key is " << key << endl;
-    string value = (*it).value;
-    cout << "value is " << value << endl;
+    cout <<key <<endl;
     string context = (*it).context;
-    cout << "context is " <<context << endl;
+    cout <<context << endl;
+    
+    ++it;
+    
+     context = (*it).context;
+    cout <<context << endl;
+   
    
     
     IntelWeb iw;

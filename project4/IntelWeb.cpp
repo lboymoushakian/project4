@@ -67,18 +67,65 @@ bool IntelWeb::ingest(const std::string& telemetryFile)
     while(getline(inf, line))
     {
         istringstream iss(line);
+        string context;
         string key;
         string value;
-        string context;
-        if(!(iss >> key >> value >> context))
+        if(!(iss >> context >> key >> value))
             cout << "not format right!!!!\n";
         bool success1 = m_map_f.insert(key, value, context);
-        bool success2 = m_map_r.insert(key, context, value);
+        bool success2 = m_map_r.insert(value, key, context);
         if(success1 && success2)
             cout << "success!!!\n";
     }
     return true;
 }
+
+
+unsigned int IntelWeb::crawl(const std::vector<std::string>& indicators,
+                   unsigned int minPrevalenceToBeGood,
+                   std::vector<std::string>& badEntitiesFound,
+                   std::vector<InteractionTuple>& badInteractions
+                   )
+{
+    
+    
+    return 1;
+}
+
+
+
+
+bool IntelWeb::purge(const std::string& entity)
+{
+    bool found = false;
+    DiskMultiMap::Iterator i = m_map_f.search(entity);
+    if(i.isValid())
+        found = true;
+    while (i.isValid())
+    {
+        string key = (*i).key;
+        string value = (*i).value;
+        string context = (*i).context;
+        m_map_f.erase(key, value, context);
+        ++i;
+    }
+    
+    DiskMultiMap::Iterator j = m_map_r.search(entity);
+    if(j.isValid())
+        found = true;
+    while (j.isValid())
+    {
+        string key = (*j).key;
+        string value = (*j).value;
+        string context = (*j).context;
+        m_map_f.erase(key, value, context);
+        ++j;
+    }
+    
+    return found;
+}
+
+
 
 
 
