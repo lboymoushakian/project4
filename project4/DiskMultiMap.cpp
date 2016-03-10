@@ -221,23 +221,27 @@ DiskMultiMap::Iterator DiskMultiMap::search(const std::string& key)
         }
         if(same == true)
         {
-            Iterator i(list);
+            Iterator i(list, &m_bf);
             return i;
         }
         list = curr.next;
     }
-    Iterator i(0);
-    return i;
+
+    Iterator j(0, &m_bf);
+    return j;
 }
 
 DiskMultiMap::Iterator::Iterator()
 {
     m_offset = 0;
+
 }
 
-DiskMultiMap::Iterator::Iterator(BinaryFile::Offset offset)
+DiskMultiMap::Iterator::Iterator(BinaryFile::Offset offset, BinaryFile* binaryfile)
 :m_offset(offset)
-{}
+{
+    bf = binaryfile;
+}
 
 bool DiskMultiMap::Iterator::isValid() const
 {
@@ -249,14 +253,34 @@ bool DiskMultiMap::Iterator::isValid() const
 
 DiskMultiMap::Iterator& DiskMultiMap::Iterator::operator++()
 {
-        this->m_offset += sizeof(Node);
-    if(this->isValid())
+    if(!isValid())
         return *this;
-    else
+    Node p;
+    bf->read(p, m_offset);
+    string key = p.key;
+   BinaryFile::Offset bfo = m_offset;
+    
+
+        bool same = false;
+    while(same == false && bfo != 0)
     {
-        this-> m_offset -= sizeof(Node);
-        return *this;
+        same = true;
+        const char* thekey = p.key;
+        for(int i = 0; i != key.length(); i++, thekey++)
+        {
+            if(key[i] != *thekey)
+                same = false;
+        }
+        if(same == false)
+            bfo = p.next;
     }
+    cout << "same is " << same << ", bfo is " << bfo << endl;
+        
+        if(same == false)
+            m_offset = 0;
+    else
+        m_offset = bfo;
+    return *this;
     
 }
 
@@ -270,6 +294,11 @@ MultiMapTuple DiskMultiMap::Iterator::operator*()
         m.context = "";
         return m;
     }
+    Node p;
+    bf->read(p, m_offset);
+    m.key = p.key;
+    m.value = p.value;
+    m.context = p.context;
     return m;
 }
 

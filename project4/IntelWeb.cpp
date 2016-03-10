@@ -5,9 +5,7 @@
 using namespace std;
 
 IntelWeb::IntelWeb()
-{
-    
-}
+{}
 
 IntelWeb::~IntelWeb()
 {

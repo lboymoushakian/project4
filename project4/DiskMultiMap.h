@@ -14,7 +14,7 @@ public:
     {
     public:
         Iterator();
-        Iterator(BinaryFile::Offset offset);
+        Iterator(BinaryFile::Offset offset, BinaryFile* binaryfile);
         // You may add additional constructors
         bool isValid() const;
         Iterator& operator++();
@@ -22,6 +22,7 @@ public:
         
     private:
         BinaryFile::Offset m_offset;
+        BinaryFile* bf;
         // Your private member declarations will go here
     };
     
