@@ -59,6 +59,7 @@ private:
     {
         int buckets;
         reuseNode reuse;
+        BinaryFile::Offset end;
         
     };
     

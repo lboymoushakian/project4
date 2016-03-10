@@ -29,6 +29,7 @@ bool DiskMultiMap::createNew(const std::string& filename, unsigned int numBucket
         b.list = 0;
         m_bf.write(b, i);
     }
+    header.end = sizeof(Header) + numBuckets * sizeof(Bucket) + 1;
     return true;
     
 }
@@ -56,68 +57,122 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
         return false;
     
     Node p;
+    for(int i = 0; i != 122; i++)
+    p.key[i] = '\0';
     const char* thekey = key.c_str();
-    for(int i = 0; i != key.size(); i++)
+    for(int i = 0; i != key.length(); i++)
     {
         p.key[i] = *thekey;
         thekey++;
     }
-    
+    for(int i = 0; i != 122; i++)
+        p.value[i] = '\0';
     const char* thevalue = value.c_str();
     for(int i = 0; i != value.size(); i++)
     {
         p.value[i] = *thevalue;
         thevalue++;
     }
-    
+    for(int i = 0; i != 122; i++)
+        p.context[i] = '\0';
     const char* thecontext = context.c_str();
     for(int i = 0; i != context.size(); i++)
     {
         p.context[i] = *thecontext;
         thecontext++;
     }
+
     
-  
+  ///////////////////////////////////
     
     std::size_t hash_number = std::hash<std::string>()(key);
-    cout << "hash number is " << hash_number << endl;
     hash_number = hash_number % header.buckets;
-    cout << "hash number is " << hash_number << endl;
-    hash_number = static_cast<int>(hash_number);
-    
-    
-   
+ 
 
-   BinaryFile::Offset offset = (hash_number * sizeof(Bucket)) + sizeof(Header) +1;
-
+   BinaryFile::Offset offset = (static_cast<int>(hash_number) * sizeof(Bucket)) + sizeof(Header) +1;
+    
     Bucket bucket;
-    
+ 
     m_bf.read(bucket, offset);
-    BinaryFile::Offset place = bucket.list;
-    
-    Node last;
-    
-    while(place !=0)
-    {
+    cout << "bucket.list at first is " << bucket.list << endl;
 
-        m_bf.read(last, place);
-        place = last.next;
-        
-    }
-    
     if(header.reuse.curr != 0)
     {
+        p.next = header.reuse.curr;
         m_bf.write(p, header.reuse.curr);
-        last.next = header.reuse.curr;
+        bucket.list = header.reuse.curr;
+        m_bf.write(bucket, offset);
         header.reuse.curr = header.reuse.next;
-      
+    
     }
     else
-        m_bf.write(p, m_bf.fileLength()+1);
-    
-    
-    
+    {
+        p.next = bucket.list;
+        m_bf.write(p, header.end);
+ 
+        bucket.list = header.end;
+        header.end += sizeof(Node);
+        m_bf.write(bucket, offset);
+          
+      
+    }
 
-    
     return true;
 }
+
+
+int DiskMultiMap::erase(const std::string& key,	const std::string& value,
+          const std::string& context)
+{
+    std::size_t hash_number = std::hash<std::string>()(key);
+    hash_number = hash_number % header.buckets;
+    
+    int count_erased = 0;
+    
+    Bucket bucket;
+    m_bf.read(bucket, (static_cast<int>(hash_number) * sizeof(Bucket)) + sizeof(Header) +1);
+    
+    BinaryFile::Offset list = bucket.list;
+    Node prev;
+    prev.next = list;
+    
+    cout <<"bucket.list is " << bucket.list << endl;
+    
+    while(list != 0)
+    {
+    Node curr;
+    m_bf.read(curr, list);
+
+        if(curr.key == key.c_str() && curr.value == value.c_str() && curr.context == context.c_str())
+        {
+            
+            reuseNode toreuse;
+            toreuse.curr = prev.next;
+            toreuse.next = header.reuse.next;
+            header.reuse.next = toreuse.curr;
+            m_bf.write(toreuse, m_bf.fileLength()+1);
+            if(prev.next == list)
+            {
+                bucket.list = curr.next;
+                m_bf.write(bucket, (static_cast<int>(hash_number) * sizeof(Bucket)) + sizeof(Header) +1);
+            }
+            else
+                prev.next = curr.next;
+            
+            
+            count_erased++;
+        }
+        prev = curr;
+        list = curr.next;
+            
+    }
+    
+    return count_erased;
+}
+
+
+
+
+
+
+
