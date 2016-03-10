@@ -250,7 +250,7 @@ bool DiskMultiMap::Iterator::isValid() const
 DiskMultiMap::Iterator& DiskMultiMap::Iterator::operator++()
 {
         this->m_offset += sizeof(Node);
-    if(isValid())
+    if(this->isValid())
         return *this;
     else
     {
@@ -263,7 +263,7 @@ DiskMultiMap::Iterator& DiskMultiMap::Iterator::operator++()
 MultiMapTuple DiskMultiMap::Iterator::operator*()
 {
     MultiMapTuple m;
-    if(!isValid())
+    if(!this->isValid())
     {
         m.key = "";
         m.value = "";
