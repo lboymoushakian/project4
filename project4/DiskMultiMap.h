@@ -14,12 +14,14 @@ public:
     {
     public:
         Iterator();
+        Iterator(BinaryFile::Offset offset);
         // You may add additional constructors
         bool isValid() const;
         Iterator& operator++();
         MultiMapTuple operator*();
         
     private:
+        BinaryFile::Offset m_offset;
         // Your private member declarations will go here
     };
     
@@ -62,9 +64,6 @@ private:
         BinaryFile::Offset end;
         
     };
-    
-    
-    
     Header header;
 };
 

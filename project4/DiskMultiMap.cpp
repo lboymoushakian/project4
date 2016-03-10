@@ -196,8 +196,82 @@ int DiskMultiMap::erase(const std::string& key,	const std::string& value,
     return count_erased;
 }
 
+DiskMultiMap::Iterator DiskMultiMap::search(const std::string& key)
+{
+    std::size_t hash_number = std::hash<std::string>()(key);
+    hash_number = hash_number % header.buckets;
+    
+    Bucket bucket;
+    m_bf.read(bucket, (static_cast<int>(hash_number) * sizeof(Bucket)) + sizeof(Header) +1);
+    
+    BinaryFile::Offset list = bucket.list;
+    while(list != 0)
+    {
+        Node curr;
+        m_bf.read(curr, list);
+        
+        
+        
+        bool same = true;
+        const char* thekey = curr.key;
+        for(int i = 0; i != key.length(); i++, thekey++)
+        {
+            if(key[i] != *thekey)
+                same = false;
+        }
+        if(same == true)
+        {
+            Iterator i(list);
+            return i;
+        }
+        list = curr.next;
+    }
+    Iterator i(0);
+    return i;
+}
+
+DiskMultiMap::Iterator::Iterator()
+{
+    m_offset = 0;
+}
+
+DiskMultiMap::Iterator::Iterator(BinaryFile::Offset offset)
+:m_offset(offset)
+{}
+
+bool DiskMultiMap::Iterator::isValid() const
+{
+   if(m_offset == 0)
+       return false;
+    return true;
+}
 
 
+DiskMultiMap::Iterator& DiskMultiMap::Iterator::operator++()
+{
+        this->m_offset += sizeof(Node);
+    if(isValid())
+        return *this;
+    else
+    {
+        this-> m_offset -= sizeof(Node);
+        return *this;
+    }
+    
+}
+
+MultiMapTuple DiskMultiMap::Iterator::operator*()
+{
+    MultiMapTuple m;
+    if(!isValid())
+    {
+        m.key = "";
+        m.value = "";
+        m.context = "";
+        return m;
+    }
+    return m;
+}
 
 
 
