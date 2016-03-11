@@ -2,9 +2,11 @@
 #define INTELWEB_H_
 
 #include "InteractionTuple.h"
+#include "BinaryFile.h"
 #include "DiskMultiMap.h"
 #include <string>
 #include <vector>
+#include <set>
 
 class IntelWeb
 {
@@ -22,10 +24,14 @@ public:
                        );
     bool purge(const std::string& entity);
     
+    
 private:
     DiskMultiMap m_map_f;
     DiskMultiMap m_map_r;
+    set<std::string> bad_entities;
+    set<InteractionTuple> interactions;
     // Your private member declarations will go here
 };
+
 
 #endif // INTELWEB_H_

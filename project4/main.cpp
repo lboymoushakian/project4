@@ -6,6 +6,7 @@
 using namespace std;
 int main()
 {
+    /*
     DiskMultiMap map;
     map.createNew("hi", 10);
     map.openExisting("hi");
@@ -36,7 +37,7 @@ int main()
     iw.createNew("what", 10);
 
     iw.openExisting("what");
-    
+    */
     
     
 }
